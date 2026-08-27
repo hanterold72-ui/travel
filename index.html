@@ -278,155 +278,108 @@ footer a { color:var(--primary); text-decoration:none; }
                     </div>
                     <div class="field">
                         <label>Пассажиры</label>
-                        <select id="passengers"><option value="1">1</option><option value="2}
-.ticket-card:hover { border-color:rgba(99,102,241,0.4); transform:translateX(4px); }
-.ticket-main { display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
-.airline-logo {
-    width:48px; height:48px; border-radius:10px;
-    background:rgba(255,255,255,0.08);
-    display:flex; align-items:center; justify-content:center;
-    font-size:11px; font-weight:700; color:var(--primary);
-    flex-shrink:0;
-}
-.route-info { flex:1; min-width:200px; }
-.route-cities { font-size:16px; font-weight:700; margin-bottom:4px; }
-.route-details { color:var(--muted); font-size:12px; display:flex; gap:12px; flex-wrap:wrap; }
-.route-details span { display:flex; align-items:center; gap:4px; }
-.ticket-price { text-align:right; }
-.price-value { font-size:22px; font-weight:800; background:var(--gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-.price-label { font-size:11px; color:var(--muted); margin-bottom:8px; }
-.book-btn {
-    padding:10px 18px; background:var(--gradient); border:none; border-radius:10px;
-    color:white; font-size:13px; font-weight:700; cursor:pointer;
-    transition:all 0.3s; white-space:nowrap;
-}
-.book-btn:hover { transform:scale(1.05); box-shadow:0 6px 20px rgba(99,102,241,0.5); }
-
-/* Лоадер */
-.loader { text-align:center; padding:40px; display:none; }
-.loader.show { display:block; }
-.spinner {
-    width:40px; height:40px; margin:0 auto 12px;
-    border:3px solid rgba(255,255,255,0.1); border-top-color:var(--primary);
-    border-radius:50%; animation:spin 0.8s linear infinite;
-}
-@keyframes spin { to { transform:rotate(360deg); } }
-.loader-text { color:var(--muted); font-size:13px; }
-
-/* Пусто */
-.empty-state { text-align:center; padding:40px; color:var(--muted); display:none; }
-.empty-state.show { display:block; }
-.empty-icon { font-size:48px; margin-bottom:12px; }
-
-/* Статус API */
-.api-status {
-    position:fixed; bottom:20px; right:20px;
-    padding:8px 12px; background:var(--card); backdrop-filter:blur(10px);
-    border:1px solid var(--border); border-radius:10px;
-    font-size:11px; display:flex; align-items:center; gap:6px;
-    z-index:99;
-}
-.api-dot { width:6px; height:6px; border-radius:50%; }
-.api-dot.ok { background:var(--success); box-shadow:0 0 6px var(--success); }
-.api-dot.err { background:var(--danger); }
-
-/* Toast */
-.toast {
-    position:fixed; bottom:70px; left:50%; transform:translateX(-50%) translateY(200px);
-    padding:12px 18px; background:var(--success); color:white;
-    border-radius:10px; font-size:13px; font-weight:600;
-    box-shadow:0 8px 24px rgba(0,0,0,0.3); transition:transform 0.3s; z-index:1000;
-}
-.toast.show { transform:translateX(-50%) translateY(0); }
-
-@media (max-width:600px) {
-    .ticket-card { grid-template-columns:1fr; }
-    .ticket-price { text-align:left; display:flex; justify-content:space-between; align-items:center; }
-    .search-grid { grid-template-columns:1fr; }
-}
-</style>
-</head>
-<body>
-
-<div class="bg-anim"></div>
-
-<header>
-    <div class="logo"><div class="logo-icon">✈️</div> TicketHub</div>
-</header>
-
-<section class="hero">
-    <h1>Найди дешёвый <span class="gradient-text">билет</span></h1>
-    <p>Ищем среди 800+ авиакомпаний • Оформление через Aviasales</p>
-</section>
-
-<!-- ПОИСК -->
-<div class="search-box">
-    <div class="search-card">
-        <form onsubmit="searchFlights(event)">
-            <div class="search-grid">
-                <div class="field" style="position:relative">
-                    <label>Откуда</label>
-                    <input type="text" id="from" placeholder="Москва" autocomplete="off" required>
-                    <input type="hidden" id="from-code">
-                    <div class="autocomplete-list" id="from-list"></div>
+                        <select id="passengers"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select>
+                    </div>
                 </div>
-                <div class="field" style="position:relative">
-                    <label>Куда</label>
-                    <input type="text" id="to" placeholder="Сочи" autocomplete="off" required>
-                    <input type="hidden" id="to-code">
-                    <div class="autocomplete-list" id="to-list"></div>
+                <button type="submit" class="search-btn" id="searchBtn">🔍 Найти билеты</button>
+            </form>
+        </div>
+        <div class="form-content" id="train" style="display:none">
+            <form onsubmit="searchTrain(event)">
+                <div class="search-grid">
+                    <div class="field"><label>Откуда</label><input type="text" id="train-from" placeholder="Москва" required></div>
+                    <div class="field"><label>Куда</label><input type="text" id="train-to" placeholder="СПб" required></div>
+                    <div class="field"><label>Дата</label><input type="date" id="train-date" required></div>
+                    <div class="field"><label>Пассажиры</label><select id="train-pass"><option>1</option><option>2</option><option>3</option></select></div>
                 </div>
-                <div class="field">
-                    <label>Туда</label>
-                    <input type="date" id="date" required>
+                <button type="submit" class="search-btn">🔍 Найти ЖД билеты</button>
+            </form>
+        </div>
+        <div class="form-content" id="bus" style="display:none">
+            <form onsubmit="searchBus(event)">
+                <div class="search-grid">
+                    <div class="field"><label>Откуда</label><input type="text" id="bus-from" placeholder="Москва" required></div>
+                    <div class="field"><label>Куда</label><input type="text" id="bus-to" placeholder="Минск" required></div>
+                    <div class="field"><label>Дата</label><input type="date" id="bus-date" required></div>
+                    <div class="field"><label>Пассажиры</label><select id="bus-pass"><option>1</option><option>2</option><option>3</option></select></div>
                 </div>
-                <div class="field">
-                    <label>Пассажиры</label>
-                    <select id="passengers">
-                        <option value="1">1 взрослый</option>
-                        <option value="2">2 взрослых</option>
-                        <option value="3">3 взрослых</option>
-                    </select>
-                </div>
-            </div>
-            <button type="submit" class="search-btn" id="searchBtn"> Найти билеты</button>
-        </form>
+                <button type="submit" class="search-btn">🔍 Найти автобусы</button>
+            </form>
+        </div>
     </div>
 </div>
 
 <!-- РЕЗУЛЬТАТЫ -->
 <section class="results-section" id="results">
     <div class="results-header">
-        <div>
-            <div class="results-title" id="resultsTitle">Результаты поиска</div>
-            <div class="results-count" id="resultsCount">—</div>
-        </div>
-    </div>
-    <div class="sort-filters">
-        <button class="filter-btn active" onclick="sortResults('price')">💰 По цене</button>
-        <button class="filter-btn" onclick="sortResults('date')">📅 По дате</button>
-        <button class="filter-btn" onclick="sortResults('airline')">️ По авиакомпании</button>
+        <div><div class="results-title" id="resTitle">Результаты</div><div class="results-count" id="resCount">—</div></div>
     </div>
     <div id="ticketsList"></div>
 </section>
+<div class="loader" id="loader"><div class="spinner"></div><div class="loader-text">Ищем билеты среди 800+ авиакомпаний...</div></div>
+<div class="empty" id="empty"><div style="font-size:40px;margin-bottom:8px">😔</div><div>Ничего не найдено</div></div>
 
-<!-- ЛОАДЕР -->
-<div class="loader" id="loader">
-    <div class="spinner"></div>
-    <div class="loader-text">Ищем билеты среди 800+ авиакомпаний...</div>
-</div>
+<!-- РУЛЕТКА -->
+<section class="roulette-section">
+    <div class="roulette-card" onclick="spinRoulette()">
+        <div class="roulette-title">🎰 Не знаешь куда?</div>
+        <div class="roulette-subtitle">Мы выберем за тебя!</div>
+        <button class="roulette-btn" onclick="event.stopPropagation(); spinRoulette()">🎲 Крутить</button>
+        <div class="roulette-result" id="rouletteResult">
+            <div class="roulette-city" id="rouletteCity">—</div>
+            <div style="color:rgba(255,255,255,0.8)" id="rouletteCountry">—</div>
+            <div class="roulette-info">
+                <div>💰 <span id="roulettePrice">—</span></div>
+                <div>⏱ <span id="rouletteDuration">—</span></div>
+                <div>⭐ <span id="rouletteRating">—</span></div>
+            </div>
+            <button class="roulette-btn" style="margin-top:12px;background:rgba(255,255,255,0.2);color:white" onclick="event.stopPropagation(); useRoulette()">🔍 Найти билеты</button>
+        </div>
+    </div>
+</section>
 
-<!-- ПУСТО -->
-<div class="empty-state" id="empty">
-    <div class="empty-icon">😔</div>
-    <div style="font-size:16px;margin-bottom:6px">Ничего не найдено</div>
-    <div style="font-size:13px">Попробуй другие даты или направления</div>
-</div>
+<!-- СОВЕТ ДНЯ -->
+<section class="tip-section">
+    <div class="tip-card">
+        <div class="tip-icon" id="tipIcon">💡</div>
+        <div class="tip-content">
+            <div class="tip-label">Совет дня</div>
+            <div class="tip-title" id="tipTitle">Загружаем...</div>
+            <div class="tip-text" id="tipText">—</div>
+        </div>
+    </div>
+</section>
 
-<div class="api-status" id="apiStatus">
-    <span class="api-dot"></span>
-    <span>Готов к поиску</span>
-</div>
+<!-- ЖИВЫЕ ЦЕНЫ -->
+<section class="live-section" id="live">
+    <div class="section-header">
+        <div><div class="section-title">🔥 Горячие цены <span class="live-badge">LIVE</span></div><div class="api-status" id="apiStatus"><span class="api-dot"></span><span>Загрузка...</span></div></div>
+    </div>
+    <div class="routes-grid" id="routesGrid"></div>
+</section>
+
+<!-- ЛАЙФХАКИ -->
+<section class="hacks-section" id="hacks">
+    <div class="section-header"><div class="section-title">🧠 Лайфхаки</div></div>
+    <div class="hacks-grid" id="hacksGrid"></div>
+</section>
+
+<!-- ЧЕК-ЛИСТ -->
+<section class="checklist-section" id="checklist">
+    <div class="section-header"><div class="section-title">🎒 Чек-лист</div></div>
+    <div class="checklist-card">
+        <div class="checklist-header">
+            <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+            <div class="progress-text" id="progressText">0/12</div>
+        </div>
+        <div class="checklist-items" id="checklistItems"></div>
+    </div>
+</section>
+
+<footer>
+    <p>© 2026 TicketHub • Поиск через <a href="https://www.travelpayouts.com" target="_blank">TravelPayouts</a></p>
+    <p style="margin-top:5px">Мы помогаем найти лучшие предложения 💜</p>
+</footer>
 
 <div class="toast" id="toast"></div>
 
@@ -434,349 +387,155 @@ footer a { color:var(--primary); text-decoration:none; }
 // ============================================
 // ⚙️ КОНФИГ
 // ============================================
-const CONFIG = {
-    MARKER: '770783',
-    TOKEN: 'e51c9a9e76a62b326714401e1be8fc43',
-    API: 'https://api.travelpayouts.com'
-};
+const CONFIG = { MARKER:'770783', TOKEN:'e51c9a9e76a62b326714401e1be8fc43', API:'https://api.travelpayouts.com' };
 
 // ============================================
-// 🌍 БАЗА ГОРОДОВ
+// 🌍 ГОРОДА
 // ============================================
 const CITIES = [
-    {name:'Москва',code:'MOW',country:'Россия'},{name:'Санкт-Петербург',code:'LED',country:'Россия'},
-    {name:'Сочи',code:'AER',country:'Россия'},{name:'Казань',code:'KZN',country:'Россия'},
-    {name:'Екатеринбург',code:'SVX',country:'Россия'},{name:'Новосибирск',code:'OVB',country:'Россия'},
-    {name:'Калининград',code:'KGD',country:'Россия'},{name:'Владивосток',code:'VVO',country:'Россия'},
-    {name:'Краснодар',code:'KRR',country:'Россия'},{name:'Ростов-на-Дону',code:'ROV',country:'Россия'},
-    {name:'Уфа',code:'UFA',country:'Россия'},{name:'Самара',code:'KUF',country:'Россия'},
-    {name:'Нижний Новгород',code:'GOJ',country:'Россия'},{name:'Минеральные Воды',code:'MRV',country:'Россия'},
-    {name:'Тюмень',code:'TJM',country:'Россия'},{name:'Красноярск',code:'KJA',country:'Россия'},
-    {name:'Иркутск',code:'IKT',country:'Россия'},{name:'Хабаровск',code:'KHV',country:'Россия'},
-    {name:'Мурманск',code:'MMK',country:'Россия'},{name:'Волгоград',code:'VOG',country:'Россия'},
-    {name:'Пермь',code:'PEE',country:'Россия'},{name:'Воронеж',code:'VOZ',country:'Россия'},
-    {name:'Омск',code:'OMS',country:'Россия'},{name:'Челябинск',code:'CEK',country:'Россия'},
-    {name:'Симферополь',code:'SIP',country:'Россия'},{name:'Махачкала',code:'MCX',country:'Россия'},
-    {name:'Минск',code:'MSQ',country:'Беларусь'},{name:'Ереван',code:'EVN',country:'Армения'},
-    {name:'Баку',code:'GYD',country:'Азербайджан'},{name:'Тбилиси',code:'TBS',country:'Грузия'},
-    {name:'Алматы',code:'ALA',country:'Казахстан'},{name:'Астана',code:'NQZ',country:'Казахстан'},
-    {name:'Ташкент',code:'TAS',country:'Узбекистан'},{name:'Бишкек',code:'FRU',country:'Кыргызстан'},
-    {name:'Стамбул',code:'IST',country:'Турция'},{name:'Анталья',code:'AYT',country:'Турция'},
-    {name:'Алания',code:'GZP',country:'Турция'},{name:'Бодрум',code:'BJV',country:'Турция'},
-    {name:'Даламан',code:'DLM',country:'Турция'},{name:'Измир',code:'ADB',country:'Турция'},
-    {name:'Дубай',code:'DXB',country:'ОАЭ'},{name:'Абу-Даби',code:'AUH',country:'ОАЭ'},
-    {name:'Шарджа',code:'SHJ',country:'ОАЭ'},{name:'Хургада',code:'HRG',country:'Египет'},
-    {name:'Шарм-эль-Шейх',code:'SSH',country:'Египет'},{name:'Каир',code:'CAI',country:'Египет'},
-    {name:'Бангкок',code:'BKK',country:'Таиланд'},{name:'Пхукет',code:'HKT',country:'Таиланд'},
-    {name:'Паттайя',code:'UTP',country:'Таиланд'},{name:'Самуи',code:'USM',country:'Таиланд'},
-    {name:'Бали',code:'DPS',country:'Индонезия'},{name:'Джакарта',code:'CGK',country:'Индонезия'},
-    {name:'Мале',code:'MLE',country:'Мальдивы'},{name:'Гоа',code:'GOI',country:'Индия'},
-    {name:'Дели',code:'DEL',country:'Индия'},{name:'Мумбаи',code:'BOM',country:'Индия'},
-    {name:'Хошимин',code:'SGN',country:'Вьетнам'},{name:'Ханой',code:'HAN',country:'Вьетнам'},
-    {name:'Нячанг',code:'CXR',country:'Вьетнам'},{name:'Фукуок',code:'PQC',country:'Вьетнам'},
-    {name:'Пекин',code:'PEK',country:'Китай'},{name:'Шанхай',code:'SHA',country:'Китай'},
-    {name:'Гуанчжоу',code:'CAN',country:'Китай'},{name:'Хайнань',code:'HAK',country:'Китай'},
-    {name:'Сеул',code:'SEL',country:'Южная Корея'},{name:'Токио',code:'TYO',country:'Япония'},
-    {name:'Осака',code:'OSA',country:'Япония'},{name:'Сингапур',code:'SIN',country:'Сингапур'},
-    {name:'Куала-Лумпур',code:'KUL',country:'Малайзия'},{name:'Париж',code:'PAR',country:'Франция'},
-    {name:'Лондон',code:'LON',country:'Великобритания'},{name:'Берлин',code:'BER',country:'Германия'},
-    {name:'Рим',code:'ROM',country:'Италия'},{name:'Милан',code:'MIL',country:'Италия'},
-    {name:'Барселона',code:'BCN',country:'Испания'},{name:'Мадрид',code:'MAD',country:'Испания'},
-    {name:'Прага',code:'PRG',country:'Чехия'},{name:'Вена',code:'VIE',country:'Австрия'},
-    {name:'Амстердам',code:'AMS',country:'Нидерланды'},{name:'Варшава',code:'WAW',country:'Польша'},
-    {name:'Будапешт',code:'BUD',country:'Венгрия'},{name:'Афины',code:'ATH',country:'Греция'},
-    {name:'Лиссабон',code:'LIS',country:'Португалия'},{name:'Дублин',code:'DUB',country:'Ирландия'},
-    {name:'Стокгольм',code:'ARN',country:'Швеция'},{name:'Осло',code:'OSL',country:'Норвегия'},
-    {name:'Копенгаген',code:'CPH',country:'Дания'},{name:'Хельсинки',code:'HEL',country:'Финляндия'},
-    {name:'Таллин',code:'TLL',country:'Эстония'},{name:'Рига',code:'RIX',country:'Латвия'},
-    {name:'Вильнюс',code:'VNO',country:'Литва'},{name:'Белград',code:'BEG',country:'Сербия'},
-    {name:'Тель-Авив',code:'TLV',country:'Израиль'},{name:'Амман',code:'AMM',country:'Иордания'},
-    {name:'Доха',code:'DOH',country:'Катар'},{name:'Маскат',code:'MCT',country:'Оман'},
-    {name:'Кейптаун',code:'CPT',country:'ЮАР'},{name:'Марракеш',code:'RAK',country:'Марокко'},
-    {name:'Нью-Йорк',code:'NYC',country:'США'},{name:'Лос-Анджелес',code:'LAX',country:'США'},
-    {name:'Майами',code:'MIA',country:'США'},{name:'Лас-Вегас',code:'LAS',country:'США'},
-    {name:'Торонто',code:'YTO',country:'Канада'},{name:'Мехико',code:'MEX',country:'Мексика'},
-    {name:'Канкун',code:'CUN',country:'Мексика'},{name:'Гавана',code:'HAV',country:'Куба'},
-    {name:'Пунта-Кана',code:'PUJ',country:'Доминикана'},{name:'Буэнос-Айрес',code:'BUE',country:'Аргентина'},
-    {name:'Рио-де-Жанейро',code:'RIO',country:'Бразилия'},{name:'Сан-Паулу',code:'SAO',country:'Бразилия'},
+    {name:'Москва',code:'MOW',country:'Россия'},{name:'Санкт-Петербург',code:'LED',country:'Россия'},{name:'Сочи',code:'AER',country:'Россия'},{name:'Казань',code:'KZN',country:'Россия'},{name:'Екатеринбург',code:'SVX',country:'Россия'},{name:'Новосибирск',code:'OVB',country:'Россия'},{name:'Калининград',code:'KGD',country:'Россия'},{name:'Владивосток',code:'VVO',country:'Россия'},{name:'Краснодар',code:'KRR',country:'Россия'},{name:'Ростов-на-Дону',code:'ROV',country:'Россия'},{name:'Уфа',code:'UFA',country:'Россия'},{name:'Самара',code:'KUF',country:'Россия'},{name:'Нижний Новгород',code:'GOJ',country:'Россия'},{name:'Минеральные Воды',code:'MRV',country:'Россия'},{name:'Тюмень',code:'TJM',country:'Россия'},{name:'Красноярск',code:'KJA',country:'Россия'},{name:'Иркутск',code:'IKT',country:'Россия'},{name:'Хабаровск',code:'KHV',country:'Россия'},{name:'Мурманск',code:'MMK',country:'Россия'},{name:'Волгоград',code:'VOG',country:'Россия'},{name:'Пермь',code:'PEE',country:'Россия'},{name:'Воронеж',code:'VOZ',country:'Россия'},{name:'Омск',code:'OMS',country:'Россия'},{name:'Челябинск',code:'CEK',country:'Россия'},{name:'Симферополь',code:'SIP',country:'Россия'},{name:'Махачкала',code:'MCX',country:'Россия'},{name:'Минск',code:'MSQ',country:'Беларусь'},{name:'Ереван',code:'EVN',country:'Армения'},{name:'Баку',code:'GYD',country:'Азербайджан'},{name:'Тбилиси',code:'TBS',country:'Грузия'},{name:'Алматы',code:'ALA',country:'Казахстан'},{name:'Астана',code:'NQZ',country:'Казахстан'},{name:'Ташкент',code:'TAS',country:'Узбекистан'},{name:'Бишкек',code:'FRU',country:'Кыргызстан'},{name:'Стамбул',code:'IST',country:'Турция'},{name:'Анталья',code:'AYT',country:'Турция'},{name:'Алания',code:'GZP',country:'Турция'},{name:'Бодрум',code:'BJV',country:'Турция'},{name:'Даламан',code:'DLM',country:'Турция'},{name:'Измир',code:'ADB',country:'Турция'},{name:'Дубай',code:'DXB',country:'ОАЭ'},{name:'Абу-Даби',code:'AUH',country:'ОАЭ'},{name:'Шарджа',code:'SHJ',country:'ОАЭ'},{name:'Хургада',code:'HRG',country:'Египет'},{name:'Шарм-эль-Шейх',code:'SSH',country:'Египет'},{name:'Каир',code:'CAI',country:'Египет'},{name:'Бангкок',code:'BKK',country:'Таиланд'},{name:'Пхукет',code:'HKT',country:'Таиланд'},{name:'Паттайя',code:'UTP',country:'Таиланд'},{name:'Самуи',code:'USM',country:'Таиланд'},{name:'Бали',code:'DPS',country:'Индонезия'},{name:'Джакарта',code:'CGK',country:'Индонезия'},{name:'Мале',code:'MLE',country:'Мальдивы'},{name:'Гоа',code:'GOI',country:'Индия'},{name:'Дели',code:'DEL',country:'Индия'},{name:'Мумбаи',code:'BOM',country:'Индия'},{name:'Хошимин',code:'SGN',country:'Вьетнам'},{name:'Ханой',code:'HAN',country:'Вьетнам'},{name:'Нячанг',code:'CXR',country:'Вьетнам'},{name:'Фукуок',code:'PQC',country:'Вьетнам'},{name:'Пекин',code:'PEK',country:'Китай'},{name:'Шанхай',code:'SHA',country:'Китай'},{name:'Гуанчжоу',code:'CAN',country:'Китай'},{name:'Хайнань',code:'HAK',country:'Китай'},{name:'Сеул',code:'SEL',country:'Южная Корея'},{name:'Токио',code:'TYO',country:'Япония'},{name:'Осака',code:'OSA',country:'Япония'},{name:'Сингапур',code:'SIN',country:'Сингапур'},{name:'Куала-Лумпур',code:'KUL',country:'Малайзия'},{name:'Париж',code:'PAR',country:'Франция'},{name:'Лондон',code:'LON',country:'Великобритания'},{name:'Берлин',code:'BER',country:'Германия'},{name:'Рим',code:'ROM',country:'Италия'},{name:'Милан',code:'MIL',country:'Италия'},{name:'Барселона',code:'BCN',country:'Испания'},{name:'Мадрид',code:'MAD',country:'Испания'},{name:'Прага',code:'PRG',country:'Чехия'},{name:'Вена',code:'VIE',country:'Австрия'},{name:'Амстердам',code:'AMS',country:'Нидерланды'},{name:'Варшава',code:'WAW',country:'Польша'},{name:'Будапешт',code:'BUD',country:'Венгрия'},{name:'Афины',code:'ATH',country:'Греция'},{name:'Лиссабон',code:'LIS',country:'Португалия'},{name:'Дублин',code:'DUB',country:'Ирландия'},{name:'Стокгольм',code:'ARN',country:'Швеция'},{name:'Осло',code:'OSL',country:'Норвегия'},{name:'Копенгаген',code:'CPH',country:'Дания'},{name:'Хельсинки',code:'HEL',country:'Финляндия'},{name:'Таллин',code:'TLL',country:'Эстония'},{name:'Рига',code:'RIX',country:'Латвия'},{name:'Вильнюс',code:'VNO',country:'Литва'},{name:'Белград',code:'BEG',country:'Сербия'},{name:'Тель-Авив',code:'TLV',country:'Израиль'},{name:'Амман',code:'AMM',country:'Иордания'},{name:'Доха',code:'DOH',country:'Катар'},{name:'Маскат',code:'MCT',country:'Оман'},{name:'Кейптаун',code:'CPT',country:'ЮАР'},{name:'Марракеш',code:'RAK',country:'Марокко'},{name:'Нью-Йорк',code:'NYC',country:'США'},{name:'Лос-Анджелес',code:'LAX',country:'США'},{name:'Майами',code:'MIA',country:'США'},{name:'Лас-Вегас',code:'LAS',country:'США'},{name:'Торонто',code:'YTO',country:'Канада'},{name:'Мехико',code:'MEX',country:'Мексика'},{name:'Канкун',code:'CUN',country:'Мексика'},{name:'Гавана',code:'HAV',country:'Куба'},{name:'Пунта-Кана',code:'PUJ',country:'Доминикана'},{name:'Буэнос-Айрес',code:'BUE',country:'Аргентина'},{name:'Рио-де-Жанейро',code:'RIO',country:'Бразилия'},{name:'Сан-Паулу',code:'SAO',country:'Бразилия'},
 ];
 
 // ============================================
 // 🔤 АВТОКОМПЛИТ
 // ============================================
-function setupAC(inputId, listId, hiddenId) {
-    const input = document.getElementById(inputId);
-    const list = document.getElementById(listId);
-    const hidden = document.getElementById(hiddenId);
-    let selIdx = -1, matches = [];
-
-    input.addEventListener('input', () => {
-        const q = input.value.trim().toLowerCase();
-        hidden.value = ''; selIdx = -1;
-        if (q.length < 1) { list.classList.remove('show'); return; }
-
-        matches = CITIES.filter(c =>
-            c.name.toLowerCase().includes(q) ||
-            c.code.toLowerCase().includes(q) ||
-            c.country.toLowerCase().includes(q)
-        ).slice(0, 12);
-
-        if (!matches.length) { list.classList.remove('show'); return; }
-
-        list.innerHTML = matches.map((c, i) => `
-            <div class="ac-item" data-i="${i}" data-code="${c.code}" data-name="${c.name}">
-                <span>${c.name}, ${c.country}</span>
-                <span class="iata">${c.code}</span>
-            </div>
-        `).join('');
+function setupAC(id, listId, hiddenId) {
+    const inp = document.getElementById(id), list = document.getElementById(listId), hid = document.getElementById(hiddenId);
+    let sel = -1, matches = [];
+    inp.addEventListener('input', () => {
+        const q = inp.value.trim().toLowerCase(); hid.value=''; sel=-1;
+        if(q.length<1){list.classList.remove('show');return;}
+        matches = CITIES.filter(c=>c.name.toLowerCase().includes(q)||c.code.toLowerCase().includes(q)||c.country.toLowerCase().includes(q)).slice(0,12);
+        if(!matches.length){list.classList.remove('show');return;}
+        list.innerHTML = matches.map((c,i)=>`<div class="ac-item" data-i="${i}" data-code="${c.code}" data-name="${c.name}"><span>${c.name}, ${c.country}</span><span class="iata">${c.code}</span></div>`).join('');
         list.classList.add('show');
-
-        list.querySelectorAll('.ac-item').forEach(el => {
-            el.addEventListener('click', () => {
-                input.value = el.dataset.name;
-                hidden.value = el.dataset.code;
-                list.classList.remove('show');
-            });
-        });
+        list.querySelectorAll('.ac-item').forEach(el=>el.addEventListener('click',()=>{inp.value=el.dataset.name;hid.value=el.dataset.code;list.classList.remove('show');}));
     });
-
-    input.addEventListener('keydown', (e) => {
-        if (!list.classList.contains('show')) return;
-        const items = list.querySelectorAll('.ac-item');
-        if (e.key === 'ArrowDown') { e.preventDefault(); selIdx = Math.min(selIdx+1, matches.length-1); hl(items); }
-        else if (e.key === 'ArrowUp') { e.preventDefault(); selIdx = Math.max(selIdx-1, -1); hl(items); }
-        else if (e.key === 'Enter' && selIdx >= 0) { e.preventDefault(); input.value = matches[selIdx].name; hidden.value = matches[selIdx].code; list.classList.remove('show'); }
-        else if (e.key === 'Escape') list.classList.remove('show');
-    });
-
-    function hl(items) { items.forEach((it,i) => it.style.background = i===selIdx?'rgba(99,102,241,0.2)':''); }
-    input.addEventListener('focus', () => { if (list.children.length && input.value.length) list.classList.add('show'); });
-    document.addEventListener('click', e => { if (!input.contains(e.target) && !list.contains(e.target)) list.classList.remove('show'); });
+    inp.addEventListener('keydown',e=>{if(!list.classList.contains('show'))return;const items=list.querySelectorAll('.ac-item');if(e.key==='ArrowDown'){e.preventDefault();sel=Math.min(sel+1,matches.length-1);hl(items);}else if(e.key==='ArrowUp'){e.preventDefault();sel=Math.max(sel-1,-1);hl(items);}else if(e.key==='Enter'&&sel>=0){e.preventDefault();inp.value=matches[sel].name;hid.value=matches[sel].code;list.classList.remove('show');}else if(e.key==='Escape')list.classList.remove('show');});
+    function hl(items){items.forEach((it,i)=>it.style.background=i===sel?'rgba(99,102,241,0.2)':'');}
+    inp.addEventListener('focus',()=>{if(list.children.length&&inp.value.length)list.classList.add('show');});
+    document.addEventListener('click',e=>{if(!inp.contains(e.target)&&!list.contains(e.target))list.classList.remove('show');});
 }
-setupAC('from','from-list','from-code');
-setupAC('to','to-list','to-code');
+setupAC('from','from-list','from-code'); setupAC('to','to-list','to-code');
 
 // ============================================
-// 🔧 API С КЭШЕМ И RETRY
+// 🔧 API
 // ============================================
-const CACHE_TTL = 30 * 60 * 1000;
-function getCache(k) { try { const it = JSON.parse(localStorage.getItem('c_'+k)); if (!it) return null; if (Date.now()-it.t > CACHE_TTL) return null; return it.d; } catch { return null; } }
-function setCache(k, d) { try { localStorage.setItem('c_'+k, JSON.stringify({d, t:Date.now()})); } catch {} }
+const CACHE_TTL = 30*60*1000;
+function getCache(k){try{const it=JSON.parse(localStorage.getItem('c_'+k));if(!it)return null;if(Date.now()-it.t>CACHE_TTL)return null;return it.d;}catch{return null;}}
+function setCache(k,d){try{localStorage.setItem('c_'+k,JSON.stringify({d,t:Date.now()}));}catch{}}
 
-async function apiGet(path, params, retries=2) {
-    const url = new URL(CONFIG.API + path);
-    url.searchParams.set('token', CONFIG.TOKEN);
-    Object.entries(params).forEach(([k,v]) => url.searchParams.set(k,v));
-    const ck = path+'_'+JSON.stringify(params);
-    const cached = getCache(ck);
-    if (cached) { setStatus('ok','Из кэша'); return {src:'cache',data:cached}; }
-
-    for (let i=1; i<=retries; i++) {
-        try {
-            const ctrl = new AbortController();
-            const t = setTimeout(()=>ctrl.abort(), 10000);
-            const r = await fetch(url.toString(), {signal:ctrl.signal});
-            clearTimeout(t);
-            if (!r.ok) throw new Error('HTTP '+r.status);
-            const d = await r.json();
-            setCache(ck, d);
-            setStatus('ok','API подключён');
-            return {src:'api',data:d};
-        } catch(e) {
-            if (i===retries) { setStatus('err','API недоступен'); return {src:'error',data:null}; }
-            await new Promise(r=>setTimeout(r, 1000*i));
-        }
-    }
+async function apiGet(path,params,retries=2){
+    const url=new URL(CONFIG.API+path);url.searchParams.set('token',CONFIG.TOKEN);Object.entries(params).forEach(([k,v])=>url.searchParams.set(k,v));
+    const ck=path+'_'+JSON.stringify(params),cached=getCache(ck);
+    if(cached){setStatus('ok','Из кэша');return{src:'cache',data:cached};}
+    for(let i=1;i<=retries;i++){try{const ctrl=new AbortController(),t=setTimeout(()=>ctrl.abort(),10000),r=await fetch(url.toString(),{signal:ctrl.signal});clearTimeout(t);if(!r.ok)throw new Error('HTTP '+r.status);const d=await r.json();setCache(ck,d);setStatus('ok','API подключён');return{src:'api',data:d};}catch(e){if(i===retries){setStatus('err','API недоступен (fallback)');return{src:'error',data:null};}await new Promise(r=>setTimeout(r,1000*i));}}
 }
-
-function setStatus(s, t) {
-    const el = document.getElementById('apiStatus');
-    el.querySelector('.api-dot').className = 'api-dot ' + (s==='ok'?'ok':'err');
-    el.querySelector('span:last-child').textContent = t;
-}
+function setStatus(s,t){const el=document.getElementById('apiStatus');el.querySelector('.api-dot').className='api-dot '+(s==='ok'?'ok':'err');el.querySelector('span:last-child').textContent=t;}
 
 // ============================================
-// 🔍 ПОИСК БИЛЕТОВ
+// 🔍 ПОИСК
 // ============================================
-let currentResults = [];
-let currentSearch = {};
-
-async function searchFlights(e) {
+let currentResults=[],currentSearch={};
+async function searchFlights(e){
     e.preventDefault();
-    const from = document.getElementById('from-code').value;
-    const to = document.getElementById('to-code').value;
-    const fromName = document.getElementById('from').value;
-    const toName = document.getElementById('to').value;
-    const date = document.getElementById('date').value;
-
-    if (!from || !to) { showToast('️ Выбери города из списка'); return; }
-
-    currentSearch = { from, to, fromName, toName, date };
-
-    // Показываем лоадер
-    document.getElementById('loader').classList.add('show');
-    document.getElementById('results').classList.remove('show');
-    document.getElementById('empty').classList.remove('show');
-    document.getElementById('searchBtn').disabled = true;
-
-    // Ищем через 2 эндпоинта параллельно
-    const [directRes, cheapRes] = await Promise.all([
-        apiGet('/v2/prices/direct', {origin:from, destination:to, date, currency:'rub'}),
-        apiGet('/v1/prices/cheap', {origin:from, destination:to, currency:'rub'})
-    ]);
-
-    document.getElementById('loader').classList.remove('show');
-    document.getElementById('searchBtn').disabled = false;
-
-    const tickets = [];
-
-    // Обработка direct (прямые рейсы на конкретную дату)
-    if (directRes.data && directRes.data.success && directRes.data.data) {
-        const d = directRes.data.data;
-        if (d.price) {
-            tickets.push({
-                airline: d.airline || '—',
-                flightNumber: d.flight_number || '',
-                departureAt: d.departure_at || date,
-                returnAt: d.return_at || null,
-                price: d.price,
-                from: fromName, to: toName,
-                fromCode: from, toCode: to,
-                transfers: d.transfers || 0,
-                link: d.link || null,
-                duration: d.duration || null
-            });
-        }
-    }
-
-    // Обработка cheap (дешёвые на месяц)
-    if (cheapRes.data && cheapRes.data.success && cheapRes.data.data) {
-        const entries = Object.entries(cheapRes.data.data).slice(0, 20);
-        for (const [destCode, info] of entries) {
-            const city = CITIES.find(c=>c.code===destCode);
-            if (!city) continue;
-            for (const item of (info || [])) {
-                if (!item.price || !item.departure_at) continue;
-                // Если ищем конкретный маршрут — фильтруем
-                if (to && destCode !== to) continue;
-                tickets.push({
-                    airline: item.airline || '—',
-                    flightNumber: item.flight_number || '',
-                    departureAt: item.departure_at,
-                    returnAt: item.return_at || null,
-                    price: item.price,
-                    from: fromName, to: city.name,
-                    fromCode: from, toCode: destCode,
-                    transfers: item.transfers || 0,
-                    link: item.link || null,
-                    duration: item.duration || null
-                });
-            }
-        }
-    }
-
-    // Убираем дубликаты
-    const seen = new Set();
-    const unique = tickets.filter(t => {
-        const key = t.airline + '_' + t.departureAt + '_' + t.price;
-        if (seen.has(key)) return false;
-        seen.add(key);
-        return true;
-    });
-
-    currentResults = unique;
-
-    if (unique.length === 0) {
-        document.getElementById('empty').classList.add('show');
-        document.getElementById('results').classList.remove('show');
-        showToast(' Ничего не найдено. Попробуй другие даты.');
-        return;
-    }
-
-    // Сортируем по цене
-    currentResults.sort((a,b) => a.price - b.price);
-    renderTickets(currentResults);
+    const from=document.getElementById('from-code').value,to=document.getElementById('to-code').value,fromName=document.getElementById('from').value,toName=document.getElementById('to').value,date=document.getElementById('date').value;
+    if(!from||!to){showToast('⚠️ Выбери города');return;}
+    currentSearch={from,to,fromName,toName,date};
+    document.getElementById('loader').classList.add('show');document.getElementById('results').classList.remove('show');document.getElementById('empty').classList.remove('show');document.getElementById('searchBtn').disabled=true;
+    const [dirRes,cheapRes]=await Promise.all([apiGet('/v2/prices/direct',{origin:from,destination:to,date,currency:'rub'}),apiGet('/v1/prices/cheap',{origin:from,destination:to,currency:'rub'})]);
+    document.getElementById('loader').classList.remove('show');document.getElementById('searchBtn').disabled=false;
+    const tickets=[];
+    if(dirRes.data&&dirRes.data.success&&dirRes.data.data&&dirRes.data.data.price){tickets.push({airline:dirRes.data.data.airline||'—',departureAt:dirRes.data.data.departure_at||date,price:dirRes.data.data.price,from:fromName,to:toName,fromCode:from,toCode:to,transfers:dirRes.data.data.transfers||0});}
+    if(cheapRes.data&&cheapRes.data.success&&cheapRes.data.data){const entries=Object.entries(cheapRes.data.data).slice(0,20);for(const[destCode,info]of entries){const city=CITIES.find(c=>c.code===destCode);if(!city)continue;for(const item of(info||[])){if(!item.price||!item.departure_at)continue;if(to&&destCode!==to)continue;tickets.push({airline:item.airline||'—',departureAt:item.departure_at,price:item.price,from:fromName,to:city.name,fromCode:from,toCode:destCode,transfers:item.transfers||0});}}}
+    const seen=new Set();currentResults=tickets.filter(t=>{const key=t.airline+'_'+t.departureAt+'_'+t.price;if(seen.has(key))return false;seen.add(key);return true;});
+    if(!currentResults.length){document.getElementById('empty').classList.add('show');showToast('😔 Ничего не найдено');return;}
+    currentResults.sort((a,b)=>a.price-b.price);renderTickets(currentResults);
 }
-
-function renderTickets(tickets) {
-    const list = document.getElementById('ticketsList');
-    document.getElementById('resultsTitle').textContent = `${currentSearch.fromName} → ${currentSearch.toName}`;
-    document.getElementById('resultsCount').textContent = `Найдено ${tickets.length} вариантов • ${new Date(currentSearch.date).toLocaleDateString('ru')}`;
-
-    list.innerHTML = tickets.map(t => {
-        const depDate = new Date(t.departureAt);
-        const depStr = depDate.toLocaleDateString('ru', {day:'numeric', month:'short', weekday:'short'});
-        const depTime = depDate.toLocaleTimeString('ru', {hour:'2-digit', minute:'2-digit'});
-        const transfers = t.transfers === 0 ? 'Прямой' : `${t.transfers} пересадк${t.transfers===1?'а':t.transfers<5?'и':'ок'}`;
-
-        // Партнёрская ссылка для оформления
-        const bookUrl = `https://www.aviasales.ru/search?marker=${CONFIG.MARKER}&origin=${t.fromCode}&destination=${t.toCode}&departure_date=${t.departureAt.split('T')[0]}&adult=1&currency=rub`;
-
-        return `
-        <div class="ticket-card">
-            <div class="ticket-main">
-                <div class="airline-logo">${t.airline.substring(0,2).toUpperCase()}</div>
-                <div class="route-info">
-                    <div class="route-cities">${t.from} → ${t.to}</div>
-                    <div class="route-details">
-                        <span>📅 ${depStr}</span>
-                        <span>🕐 ${depTime}</span>
-                        <span>✈️ ${t.airline}</span>
-                        <span>🔄 ${transfers}</span>
-                    </div>
-                </div>
-            </div>
-            <div class="ticket-price">
-                <div class="price-value">${t.price.toLocaleString('ru')} ₽</div>
-                <div class="price-label">за пассажира</div>
-                <button class="book-btn" onclick="bookTicket('${t.fromCode}','${t.toCode}','${t.departureAt.split('T')[0]}','${t.airline}')">Оформить →</button>
-            </div>
-        </div>`;
-    }).join('');
-
-    document.getElementById('results').classList.add('show');
-    document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'});
+function renderTickets(tickets){
+    const list=document.getElementById('ticketsList');document.getElementById('resTitle').textContent=currentSearch.fromName+' → '+currentSearch.toName;document.getElementById('resCount').textContent='Найдено '+tickets.length+' • '+new Date(currentSearch.date).toLocaleDateString('ru');
+    list.innerHTML=tickets.map(t=>{const dep=new Date(t.departureAt),depStr=dep.toLocaleDateString('ru',{day:'numeric',month:'short'}),depTime=dep.toLocaleTimeString('ru',{hour:'2-digit',minute:'2-digit'}),trans=t.transfers===0?'Прямой':t.transfers+' пересадки',url=`https://www.aviasales.ru/search?marker=${CONFIG.MARKER}&origin=${t.fromCode}&destination=${t.toCode}&departure_date=${t.departureAt.split('T')[0]}&adult=1&currency=rub`;
+    return`<div class="ticket-card"><div class="ticket-main"><div class="airline-logo">${t.airline.substring(0,2).toUpperCase()}</div><div class="route-info"><div class="route-cities">${t.from} → ${t.to}</div><div class="route-details"><span>📅 ${depStr}</span><span>🕐 ${depTime}</span><span>✈️ ${t.airline}</span><span>🔄 ${trans}</span></div></div></div><div class="ticket-price"><div class="price-value">${t.price.toLocaleString('ru')} ₽</div><div class="price-label">за пассажира</div><button class="book-btn" onclick="book('${t.fromCode}','${t.toCode}','${t.departureAt.split('T')[0]}')">Оформить →</button></div></div>`;}).join('');
+    document.getElementById('results').classList.add('show');document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'});
 }
+function book(from,to,date){const url=`https://www.aviasales.ru/search?marker=${CONFIG.MARKER}&origin=${from}&destination=${to}&departure_date=${date}&adult=1&currency=rub`;showToast('✈️ Переход к оформлению...');setTimeout(()=>window.open(url,'_blank'),400);}
 
-function bookTicket(from, to, date, airline) {
-    const url = `https://www.aviasales.ru/search?marker=${CONFIG.MARKER}&origin=${from}&destination=${to}&departure_date=${date}&adult=1&currency=rub`;
-    showToast('✈️ Переходим к оформлению...');
-    setTimeout(() => window.open(url, '_blank'), 400);
-}
+// ЖД и АВТОБУСЫ
+function searchTrain(e){e.preventDefault();const from=document.getElementById('train-from').value,to=document.getElementById('train-to').value,date=document.getElementById('train-date').value;if(!from||!to){showToast('⚠️ Укажите города');return;}const url=`https://travel.yandex.ru/trains/?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&date=${date}`;showToast('🚆 Поиск ЖД...');setTimeout(()=>window.open(url,'_blank'),300);}
+function searchBus(e){e.preventDefault();const from=document.getElementById('bus-from').value,to=document.getElementById('bus-to').value,date=document.getElementById('bus-date').value;if(!from||!to){showToast('⚠️ Укажите города');return;}const url=`https://infobus.ru/?as=tp${CONFIG.MARKER}&from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&date=${date}`;showToast('🚌 Поиск автобусов...');setTimeout(()=>window.open(url,'_blank'),300);}
 
-function sortResults(by) {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    event.target.classList.add('active');
+// ============================================
+// 🎰 РУЛЕТКА
+// ============================================
+const ROULETTE=[{city:'Сочи',code:'AER',price:'4 200 ₽',dur:'2ч 20м',rat:'4.6/5',country:'Россия'},{city:'Стамбул',code:'IST',price:'11 200 ₽',dur:'3ч 40м',rat:'4.8/5',country:'Турция'},{city:'Дубай',code:'DXB',price:'18 900 ₽',dur:'5ч 30м',rat:'4.9/5',country:'ОАЭ'},{city:'Тбилиси',code:'TBS',price:'9 800 ₽',dur:'2ч 40м',rat:'4.9/5',country:'Грузия'},{city:'Ереван',code:'EVN',price:'8 500 ₽',dur:'2ч 40м',rat:'4.8/5',country:'Армения'},{city:'Минск',code:'MSQ',price:'6 300 ₽',dur:'1ч 30м',rat:'4.5/5',country:'Беларусь'},{city:'Калининград',code:'KGD',price:'5 100 ₽',dur:'2ч 10м',rat:'4.7/5',country:'Россия'},{city:'Анталья',code:'AYT',price:'13 400 ₽',dur:'3ч 50м',rat:'4.7/5',country:'Турция'},];
+let curRoulette=null;
+function spinRoulette(){const res=document.getElementById('rouletteResult'),cityEl=document.getElementById('rouletteCity');res.classList.add('show');cityEl.textContent='🎰 Крутим...';document.getElementById('rouletteCountry').textContent='';let cnt=0;const int=setInterval(()=>{const r=ROULETTE[Math.floor(Math.random()*ROULETTE.length)];cityEl.textContent=r.city+' '+r.country;cnt++;if(cnt>12){clearInterval(int);curRoulette=ROULETTE[Math.floor(Math.random()*ROULETTE.length)];cityEl.textContent=curRoulette.city;document.getElementById('rouletteCountry').textContent=curRoulette.country;document.getElementById('roulettePrice').textContent=curRoulette.price;document.getElementById('rouletteDuration').textContent=curRoulette.dur;document.getElementById('rouletteRating').textContent=curRoulette.rat;showToast('🎉 '+curRoulette.city+'!');}},100);}
+function useRoulette(){if(!curRoulette)return;document.getElementById('from').value='Москва';document.getElementById('from-code').value='MOW';document.getElementById('to').value=curRoulette.city;document.getElementById('to-code').value=curRoulette.code;document.getElementById('search').scrollIntoView({behavior:'smooth'});}
 
-    if (by === 'price') currentResults.sort((a,b) => a.price - b.price);
-    else if (by === 'date') currentResults.sort((a,b) => new Date(a.departureAt) - new Date(b.departureAt));
-    else if (by === 'airline') currentResults.sort((a,b) => a.airline.localeCompare(b.airline));
+// ============================================
+// 💡 СОВЕТ ДНЯ
+// ============================================
+const TIPS=[{icon:'💡',title:'Покупай за 2 месяца',text:'Оптимальное время: 4-8 недель для внутренних, 2-4 месяца для международных рейсов.'},{icon:'📅',title:'Вторник и среда дешевле',text:'Авиакомпании запускают распродажи во вторник. Билеты на эти дни тоже дешевле.'},{icon:'🔍',title:'Режим инкогнито',text:'Сайты могут повышать цены при повторном поиске. Используй приватный режим.'},{icon:'🌙',title:'Ночные рейсы',text:'Ранние утренние и поздние ночные рейсы на 20-30% дешевле дневных.'},{icon:'🎒',title:'Только ручная кладь',text:'У лоукостеров багаж стоит дорого. Путешествуй налегке.'},{icon:'🔔',title:'Уведомления о ценах',text:'Подпишись на алерты — получишь уведомление когда цена упадёт.'}];
+function renderTip(){const d=new Date().getDate()%TIPS.length,t=TIPS[d];document.getElementById('tipIcon').textContent=t.icon;document.getElementById('tipTitle').textContent=t.title;document.getElementById('tipText').textContent=t.text;}
 
-    renderTickets(currentResults);
-}
+// ============================================
+// 🔥 ЖИВЫЕ ЦЕНЫ
+// ============================================
+const FALLBACK=[{emoji:'✈️',from:'Москва',to:'Сочи',price:4200,old:5800,trend:'down',tip:'Летай во вторник'},{emoji:'✈️',from:'Москва',to:'Стамбул',price:11200,old:14500,trend:'hot',tip:'Сезон открыт'},{emoji:'✈️',from:'Москва',to:'Дубай',price:18900,old:24000,trend:'hot',tip:'Выгодно'},{emoji:'✈️',from:'Москва',to:'Тбилиси',price:9800,old:12400,trend:'down',tip:'Грузия ждёт'},{emoji:'✈️',from:'Москва',to:'Ереван',price:8500,old:11200,trend:'down',tip:'Армения близко'},{emoji:'✈️',from:'Москва',to:'Минск',price:6300,old:7800,trend:'down',tip:'Беларусь рядом'},];
+async function renderRoutes(){const grid=document.getElementById('routesGrid'),res=await apiGet('/v1/prices/cheap',{origin:'MOW',currency:'rub'});let routes=FALLBACK;if(res.src==='api'&&res.data&&res.data.success){const apiR=[],dests=Object.entries(res.data.data||{}).slice(0,6);for(const[code,info]of dests){const city=CITIES.find(c=>c.code===code);if(!city)continue;const price=info[0]?.price||0;if(price===0)continue;apiR.push({emoji:'✈️',from:'Москва',to:city.name,price:price,old:Math.round(price*1.35),trend:price<10000?'down':'hot',tip:info[0]?.airline||'Прямой'});}if(apiR.length)routes=apiR;}
+    grid.innerHTML=routes.map(r=>`<div class="route-card" onclick="quick('${r.from}','${r.to}','${CITIES.find(c=>c.name===r.to)?.code||''}')"><div class="route-header"><div class="route-emoji">${r.emoji}</div><div class="route-trend ${r.trend}">${r.trend==='down'?'📉':'🔥'}</div></div><div class="route-cities">${r.from} → ${r.to}</div><div class="route-info">Прямой рейс</div><div class="route-price"><div><div class="price-old">${r.old.toLocaleString()} ₽</div><div class="price-val">${r.price.toLocaleString()} ₽</div></div></div><div class="route-tip">${r.tip}</div></div>`).join('');}
+function quick(from,to,code){document.getElementById('from').value=from;document.getElementById('from-code').value='MOW';document.getElementById('to').value=to;document.getElementById('to-code').value=code;document.querySelector('[data-tab="plane"]').click();document.getElementById('search').scrollIntoView({behavior:'smooth'});}
+
+// ============================================
+// 🧠 ЛАЙФХАКИ
+// ============================================
+const HACKS=[{icon:'📅',title:'Вторник и среда',text:'Авиакомпании запускают распродажи во вторник. Билеты на эти дни дешевле.',stat:'-23%'},{icon:'🕐',title:'За 2 месяца',text:'Оптимальное время покупки: 4-8 недель для внутренних рейсов.',stat:'-35%'},{icon:'🔍',title:'Инкогнито',text:'Сайты повышают цены при повторном поиске. Используй приватный режим.',stat:'-15%'},{icon:'🌙',title:'Ночные рейсы',text:'Ранние и поздние рейсы на 20-30% дешевле дневных.',stat:'-30%'},{icon:'🎒',title:'Без багажа',text:'У лоукостеров багаж стоит дорого. Путешествуй налегке.',stat:'-50%'},{icon:'🔔',title:'Алерты',text:'Подпишись на уведомления о снижении цены.',stat:'-40%'},];
+function renderHacks(){document.getElementById('hacksGrid').innerHTML=HACKS.map(h=>`<div class="hack-card"><div class="hack-icon">${h.icon}</div><div class="hack-title">${h.title}</div><div class="hack-text">${h.text}</div><div class="hack-stat">💰 ${h.stat}</div></div>`).join('');}
+
+// ============================================
+// 🎒 ЧЕК-ЛИСТ
+// ============================================
+const CHECK=[{icon:'🛂',text:'Паспорт'},{icon:'🎫',text:'Билеты'},{icon:'🏨',text:'Отель'},{icon:'💳',text:'Карты'},{icon:'📱',text:'Зарядка'},{icon:'💊',text:'Аптечка'},{icon:'🔌',text:'Переходник'},{icon:'👕',text:'Одежда'},{icon:'🧴',text:'Косметика'},{icon:'📷',text:'Камера'},{icon:'📄',text:'Страховка'},{icon:'🍫',text:'Перекус'},];
+function renderCheck(){const saved=JSON.parse(localStorage.getItem('th_check')||'[]');document.getElementById('checklistItems').innerHTML=CHECK.map((it,i)=>`<div class="check-item ${saved.includes(i)?'checked':''}" data-i="${i}" onclick="toggle(${i})"><div class="check-box"></div><span>${it.icon} ${it.text}</span></div>`).join('');updProg();}
+function toggle(i){const saved=JSON.parse(localStorage.getItem('th_check')||'[]');if(saved.includes(i))localStorage.setItem('th_check',JSON.stringify(saved.filter(x=>x!==i)));else{saved.push(i);localStorage.setItem('th_check',JSON.stringify(saved));if(saved.length===CHECK.length)showToast('🎉 Всё готово!');}renderCheck();}
+function updProg(){const saved=JSON.parse(localStorage.getItem('th_check')||'[]');const p=(saved.length/CHECK.length)*100;document.getElementById('progressFill').style.width=p+'%';document.getElementById('progressText').textContent=saved.length+'/12';}
+
+// ============================================
+// 🎯 ТАБЫ
+// ============================================
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.form-content').forEach(x=>x.style.display='none');t.classList.add('active');document.getElementById(t.dataset.tab).style.display='block';}));
+
+// ============================================
+// 📅 ДАТА
+// ============================================
+const today=new Date().toISOString().split('T')[0];document.querySelectorAll('input[type="date"]').forEach(i=>{i.min=today;if(!i.value)i.value=today;});
+
+// ============================================
+// ✈️ САМОЛЁТИКИ
+// ============================================
+function createPlanes(){const trail=document.getElementById('planeTrail'),planes=['✈️','🛫','🛬'];for(let i=0;i<4;i++){const p=document.createElement('div');p.className='flying-plane';p.textContent=planes[Math.floor(Math.random()*planes.length)];p.style.top=(Math.random()*70+15)+'%';p.style.animationDuration=(Math.random()*15+20)+'s';p.style.animationDelay=(Math.random()*15)+'s';trail.appendChild(p);}}
+
+// ============================================
+// 🔢 СЧЁТЧИКИ
+// ============================================
+function animateCounts(){document.querySelectorAll('.stat-value').forEach(el=>{const target=parseInt(el.dataset.count),suffix=el.dataset.count==='34'?'%':'',dur=2000,start=performance.now();function upd(now){const prog=Math.min((now-start)/dur,1),eased=1-Math.pow(1-prog,3),cur=Math.floor(target*eased);if(target>=1e6)el.textContent=(cur/1e6).toFixed(1)+'M+';else if(target>=1000)el.textContent=cur.toLocaleString('ru')+suffix;else el.textContent=cur+suffix;if(prog<1)requestAnimationFrame(upd);}requestAnimationFrame(upd);});}
+
+// ============================================
+// 👥 LIVE
+// ============================================
+function updLive(){const el=document.getElementById('liveUsers');setInterval(()=>{const d=Math.floor(Math.random()*20)-10,cur=Math.max(2500,Math.min(3200,parseInt(el.textContent.replace(/\s/g,''))+d));el.textContent=cur.toLocaleString('ru');},3000);}
 
 // ============================================
 // 🔔 TOAST
 // ============================================
-function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3000);
-}
+function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
 
 // ============================================
-//  ДАТА
+// 🚀 INIT
 // ============================================
-const today = new Date().toISOString().split('T')[0];
-document.getElementById('date').min = today;
-document.getElementById('date').value = today;
-
-// ============================================
-// 🚀 СТАРТ
-// ============================================
-setStatus('ok', 'Готов к поиску');
-showToast('✅ TicketHub готов!');
+async function init(){createPlanes();renderHacks();renderCheck();renderTip();updLive();animateCounts();await renderRoutes();setStatus('ok','Готов');showToast('✅ TicketHub готов!');}
+if(document.readyState==='complete'||document.readyState==='interactive')setTimeout(init,100);else{document.addEventListener('DOMContentLoaded',init);window.addEventListener('load',init);}
+setTimeout(init,500);
 </script>
 </body>
 </html>
