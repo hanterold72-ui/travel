@@ -1,7 +1,23 @@
 {
-  "functions": {
-    "api/*.js": {
-      "maxDuration": 10
+  "version": 2,
+  "builds": [
+    {
+      "src": "tickethub/index.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "tickethub/api/*.js",
+      "use": "@vercel/node"
     }
-  }
+  ],
+  "routes": [
+    {
+      "src": "/",
+      "dest": "tickethub/index.html"
+    },
+    {
+      "src": "/api/(.*)",
+      "dest": "tickethub/api/$1"
+    }
+  ]
 }
